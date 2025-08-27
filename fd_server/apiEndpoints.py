@@ -323,10 +323,14 @@ def get_global_model():
         # For now, it will wait until the aggregator's main loop computes the model.
 
         global_model = aggrigatorInstance.get_global_model()
+        aggrigated_tag = aggrigatorInstance.get_aggrigated_tag()
+
+        print(aggrigated_tag)
         
         return jsonify({
             "message": "Global model is ready.",
-            "global_model_weights": global_model
+            "global_model_weights": global_model,
+            "aggrigated_tag":aggrigated_tag
         }), 200
 
     except Exception as e:

@@ -103,17 +103,33 @@ class User:
             "signature": base64.b64encode(signature).decode('utf-8'),
             "DSAPK": base64.b64encode(self.signature_handler.public_key_bytes).decode('utf-8')
         }
-        response = requests.post(f"{SERVER_URL}/registerUser", json=payload)
+        
+        url = f"{SERVER_URL}/registerUser"
+        logging.info(f"User {self.user_id}: Making POST request to {url}")
+        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
+
+        response = requests.post(url, json=payload)
+        
+        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
         response.raise_for_status()
+        
         response_data = response.json()
         self.token = int(response_data['userToken'])
         logging.info(f"User {self.user_id}: Registration successful. Received token: {self.token}")
 
     def fetch_and_establish_keys(self):
         logging.info(f"--- User {self.user_id}: Fetching public keys of other users ---")
-        response = requests.get(f"{SERVER_URL}/getUser/{self.token}")
+        
+        url = f"{SERVER_URL}/getUser/{self.token}"
+        logging.info(f"User {self.user_id}: Making GET request to {url}")
+
+        response = requests.get(url)
+
+        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
         response.raise_for_status()
-        all_users_data = response.json()['users']
+        
+        response_data = response.json()
+        all_users_data = response_data['users']
         
         self.num_participants = len(all_users_data)
         logging.info(f"User {self.user_id}: Determined there are {self.num_participants} participants in this round.")
@@ -132,7 +148,8 @@ class User:
         logging.info(f"User {self.user_id}: Generated original mask: {mask}")
         
         shares = self.shamir_handler.split_secret(mask, self.num_participants, self.num_participants)
-        
+        logging.info(f"User {self.user_id}: Split mask into shares (before encryption):\n{json.dumps(shares, indent=2)}")
+
         encrypted_shares_payload = []
         for i in range(self.num_participants):
             recipient_token = i + 1
@@ -142,17 +159,35 @@ class User:
             else:
                 encrypted_share = self.shared_keys[recipient_token].encrypt(share_vector_json)
                 encrypted_shares_payload.append(base64.b64encode(encrypted_share).decode('utf-8'))
+        
         payload = {"token": self.token, "shares": encrypted_shares_payload}
-        requests.post(f"{SERVER_URL}/submit_shamir_shares", json=payload).raise_for_status()
+        url = f"{SERVER_URL}/submit_shamir_shares"
+        logging.info(f"User {self.user_id}: Making POST request to {url}")
+        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
+        
+        response = requests.post(url, json=payload)
+
+        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
+        response.raise_for_status()
+
         logging.info(f"User {self.user_id}: Submitted encrypted shares successfully.")
         return mask
 
     def receive_and_decrypt_shares(self):
         logging.info(f"--- User {self.user_id}: Fetching and decrypting my shares ---")
         payload = {"token": self.token}
-        response = requests.post(f"{SERVER_URL}/get_shamir_shares", json=payload)
+        
+        url = f"{SERVER_URL}/get_shamir_shares"
+        logging.info(f"User {self.user_id}: Making POST request to {url}")
+        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
+
+        response = requests.post(url, json=payload)
+
+        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
         response.raise_for_status()
-        received_encrypted_shares = response.json()['shares']
+        
+        response_data = response.json()
+        received_encrypted_shares = response_data['shares']
         decrypted_shares = []
         for i, enc_share_b64 in enumerate(received_encrypted_shares):
             sender_token = i + 1
@@ -162,7 +197,8 @@ class User:
             else:
                 decrypted_share_json = self.shared_keys[sender_token].decrypt(enc_share_bytes)
                 decrypted_shares.append(json.loads(decrypted_share_json.decode('utf-8')))
-        logging.info(f"User {self.user_id}: Successfully decrypted all received shares.")
+        
+        logging.info(f"User {self.user_id}: Successfully decrypted all received shares:\n{json.dumps(decrypted_shares, indent=2)}")
         return decrypted_shares
 
     def submit_all_final_data(self, decrypted_shares, mask):
@@ -172,8 +208,19 @@ class User:
         for share_vector in decrypted_shares:
             for i in range(VECTOR_SIZE):
                 summed_shares[i] = (summed_shares[i] + share_vector[i]) % self.shamir_handler.PRIME
+        
+        logging.info(f"User {self.user_id}: Calculated summed shares (b_sum,{self.user_id}): {summed_shares}")
+
         payload_summed = {"token": self.token, "summed_shares": summed_shares}
-        requests.post(f"{SERVER_URL}/submit_summed_shares", json=payload_summed).raise_for_status()
+        url_summed = f"{SERVER_URL}/submit_summed_shares"
+        logging.info(f"User {self.user_id}: Making POST request to {url_summed}")
+        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload_summed, indent=2)}")
+
+        response_summed = requests.post(url_summed, json=payload_summed)
+
+        logging.info(f"User {self.user_id}: RESPONSE | Status: {response_summed.status_code} | Body:\n{response_summed.text}")
+        response_summed.raise_for_status()
+
         logging.info(f"User {self.user_id}: Submitted summed shares successfully.")
         
         # 2. Submit masked weights and tag
@@ -181,22 +228,47 @@ class User:
         logging.info(f"User {self.user_id}: Generated original weights: {[round(w, 4) for w in self.original_weights]}")
         
         encoded_weights = [int(w * PRECISION_FACTOR) for w in self.original_weights]
+        logging.info(f"User {self.user_id}: Encoded weights (multiplied by {PRECISION_FACTOR}): {encoded_weights}")
+        logging.info(f"User {self.user_id}: Using mask from previous step: {mask}")
+        
         masked_weights = [(w + m) for w, m in zip(encoded_weights, mask)]
+        logging.info(f"User {self.user_id}: Calculated masked weights: {masked_weights}")
+
         verification_tag = [(w * 2 + m) for w, m in zip(encoded_weights, mask)]
+        logging.info(f"User {self.user_id}: Calculated verification tags: {verification_tag}")
+        
         payload_data = {"token": self.token, "masked_weights": masked_weights, "verification_tags": verification_tag}
-        requests.post(f"{SERVER_URL}/submit_data", json=payload_data).raise_for_status()
+        url_data = f"{SERVER_URL}/submit_data"
+        logging.info(f"User {self.user_id}: Making POST request to {url_data}")
+        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload_data, indent=2)}")
+        
+        response_data = requests.post(url_data, json=payload_data)
+        
+        logging.info(f"User {self.user_id}: RESPONSE | Status: {response_data.status_code} | Body:\n{response_data.text}")
+        response_data.raise_for_status()
+        
         logging.info(f"User {self.user_id}: Submitted masked weights and tag successfully.")
 
     def fetch_global_model(self):
         logging.info(f"--- User {self.user_id}: Fetching global model ---")
-        response = requests.get(f"{SERVER_URL}/get_global_model")
+        
+        url = f"{SERVER_URL}/get_global_model"
+        logging.info(f"User {self.user_id}: Making GET request to {url}")
+
+        response = requests.get(url)
+
+        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
         response.raise_for_status()
+
         response_data = response.json()
         global_model_encoded = response_data['global_model_weights']
+        
         if not global_model_encoded:
             logging.warning(f"User {self.user_id}: Global model is empty.")
             return
+        
         global_model_decoded = [w / PRECISION_FACTOR for w in global_model_encoded]
+        
         logging.info(f"User {self.user_id}: Final decoded global model: {[round(w, 4) for w in global_model_decoded]}")
 
 def perform_action_with_retry(action_function, action_name):
@@ -223,8 +295,17 @@ def perform_action_with_retry(action_function, action_name):
 
 def main():
     """Orchestrates the entire simulation for a single autonomous user."""
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     
+    # --- Set up logging to file and console ---
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler("simulation.log", mode='w'), # Overwrite log file each run
+            logging.StreamHandler()
+        ]
+    )
+
     user = User(user_id=random.randint(100, 999))
 
     while True: # Main loop to continuously participate in rounds

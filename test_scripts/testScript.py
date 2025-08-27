@@ -4,6 +4,8 @@ import random
 import base64
 import time
 import logging
+import os
+import numpy as np
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -11,12 +13,13 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.exceptions import InvalidSignature
 
 # --- CONFIGURATION ---
-SERVER_URL = "http://127.0.0.1:5000"
+SERVER_URL = "http://3.6.94.252:80"
 VECTOR_SIZE = 10
-NUM_USERS = 4
-PRECISION_FACTOR = 10**6 # For encoding floats to integers
+PRECISION_FACTOR = 10**6
+# This public vector 'a' must be known by both the server and all clients.
+PUBLIC_VECTOR_A = [random.randint(1, 10) for _ in range(VECTOR_SIZE)]
 
-# --- CRYPTOGRAPHIC AND UTILITY CLASSES (Self-contained for this example) ---
+# --- CRYPTOGRAPHIC AND UTILITY CLASSES ---
 
 class SignatureHandler:
     def __init__(self):
@@ -27,14 +30,6 @@ class SignatureHandler:
         )
     def sign_message(self, message):
         return self._private_key.sign(message, ec.ECDSA(hashes.SHA256()))
-    @staticmethod
-    def verify_signature(public_key_bytes, message, signature):
-        try:
-            public_key = serialization.load_pem_public_key(public_key_bytes)
-            public_key.verify(signature, message, ec.ECDSA(hashes.SHA256()))
-            return True
-        except InvalidSignature:
-            return False
 
 class KeyExchangeHandler:
     def __init__(self):
@@ -55,10 +50,10 @@ class AESCipher:
     def __init__(self, key):
         self.key = key
     def encrypt(self, plaintext_bytes):
-        nonce = random.getrandbits(96).to_bytes(12, 'big')
+        nonce = os.urandom(12)
         aead = AESGCM(self.key)
         ciphertext = aead.encrypt(nonce, plaintext_bytes, None)
-        return nonce + ciphertext # Prepend nonce for decryption
+        return nonce + ciphertext
     def decrypt(self, ciphertext_with_nonce):
         nonce = ciphertext_with_nonce[:12]
         ciphertext = ciphertext_with_nonce[12:]
@@ -66,17 +61,13 @@ class AESCipher:
         return aead.decrypt(nonce, ciphertext, None)
 
 class VectorShamirSecretSharing:
-    PRIME = 2**521 - 1 # Use a smaller prime for faster demonstration
     def __init__(self):
-        # Define the prime as an instance attribute. This is the single source of truth.
         self.PRIME = 2**521 - 1
     def _evaluate_polynomial(self, coeffs, x):
         result = 0
         for coeff in reversed(coeffs):
             result = (result * x + coeff) % self.PRIME
         return result
-    def _mod_inverse(self, n):
-        return pow(n, -1, self.PRIME)
     def split_secret(self, secret_vector, num_shares, threshold):
         shares = [[] for _ in range(num_shares)]
         for secret_element in secret_vector:
@@ -94,101 +85,54 @@ class User:
         self.signature_handler = SignatureHandler()
         self.dh_handler = KeyExchangeHandler()
         self.shamir_handler = VectorShamirSecretSharing()
-        self.shared_keys = {} # {other_user_token: aes_key}
+        self.shared_keys = {}
+        self.num_participants = 0
+        self.original_weights = []
 
     def register(self):
-        logging.info(f"--- User {self.user_id}: Registering with server ---")
         signature = self.signature_handler.sign_message(self.dh_handler.public_key_bytes)
         payload = {
             "publicKey": base64.b64encode(self.dh_handler.public_key_bytes).decode('utf-8'),
             "signature": base64.b64encode(signature).decode('utf-8'),
             "DSAPK": base64.b64encode(self.signature_handler.public_key_bytes).decode('utf-8')
         }
-        
-        url = f"{SERVER_URL}/registerUser"
-        logging.info(f"User {self.user_id}: Making POST request to {url}")
-        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
-
-        response = requests.post(url, json=payload)
-        
-        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
+        response = requests.post(f"{SERVER_URL}/registerUser", json=payload)
         response.raise_for_status()
-        
-        response_data = response.json()
-        self.token = int(response_data['userToken'])
-        logging.info(f"User {self.user_id}: Registration successful. Received token: {self.token}")
+        self.token = int(response.json()['userToken'])
 
     def fetch_and_establish_keys(self):
-        logging.info(f"--- User {self.user_id}: Fetching public keys of other users ---")
-        
-        url = f"{SERVER_URL}/getUser/{self.token}"
-        logging.info(f"User {self.user_id}: Making GET request to {url}")
-
-        response = requests.get(url)
-
-        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
+        response = requests.get(f"{SERVER_URL}/getUser/{self.token}")
         response.raise_for_status()
-        
-        response_data = response.json()
-        all_users_data = response_data['users']
-        
+        all_users_data = response.json()['users']
+        self.num_participants = len(all_users_data)
         for i, user_data in enumerate(all_users_data):
             other_user_token = i + 1
-            if other_user_token == self.token:
-                continue # Don't establish a key with yourself
-
+            if other_user_token == self.token: continue
             dh_pk_bytes = base64.b64decode(user_data['public_key'])
             shared_key = self.dh_handler.derive_shared_key(dh_pk_bytes)
             self.shared_keys[other_user_token] = AESCipher(shared_key)
-            logging.info(f"User {self.user_id}: Established shared AES key with user {other_user_token}")
 
     def submit_mask_shares(self):
-        logging.info(f"--- User {self.user_id}: Generating and submitting mask shares ---")
         mask = [random.randint(0, 100) for _ in range(VECTOR_SIZE)]
-        logging.info(f"User {self.user_id}: Generated original mask: {mask}")
-        
-        shares = self.shamir_handler.split_secret(mask, NUM_USERS, NUM_USERS)
-        logging.info(f"User {self.user_id}: Split mask into shares (before encryption):\n{json.dumps(shares, indent=2)}")
-
+        shares = self.shamir_handler.split_secret(mask, self.num_participants, self.num_participants)
         encrypted_shares_payload = []
-        for i in range(NUM_USERS):
+        for i in range(self.num_participants):
             recipient_token = i + 1
             share_vector_json = json.dumps(shares[i]).encode('utf-8')
             if recipient_token == self.token:
-                # Share for self is not encrypted
                 encrypted_shares_payload.append(base64.b64encode(share_vector_json).decode('utf-8'))
             else:
                 encrypted_share = self.shared_keys[recipient_token].encrypt(share_vector_json)
                 encrypted_shares_payload.append(base64.b64encode(encrypted_share).decode('utf-8'))
-        
         payload = {"token": self.token, "shares": encrypted_shares_payload}
-        url = f"{SERVER_URL}/submit_shamir_shares"
-        logging.info(f"User {self.user_id}: Making POST request to {url}")
-        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
-        
-        response = requests.post(url, json=payload)
-
-        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
-        response.raise_for_status()
-
-        logging.info(f"User {self.user_id}: Submitted encrypted shares successfully.")
-        return mask # Return the original mask to be used later
+        requests.post(f"{SERVER_URL}/submit_shamir_shares", json=payload).raise_for_status()
+        return mask
 
     def receive_and_decrypt_shares(self):
-        logging.info(f"--- User {self.user_id}: Fetching and decrypting my shares ---")
         payload = {"token": self.token}
-        
-        url = f"{SERVER_URL}/get_shamir_shares"
-        logging.info(f"User {self.user_id}: Making POST request to {url}")
-        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
-
-        response = requests.post(url, json=payload)
-
-        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
+        response = requests.post(f"{SERVER_URL}/get_shamir_shares", json=payload)
         response.raise_for_status()
-        
-        response_data = response.json()
-        received_encrypted_shares = response_data['shares']
+        received_encrypted_shares = response.json()['shares']
         decrypted_shares = []
         for i, enc_share_b64 in enumerate(received_encrypted_shares):
             sender_token = i + 1
@@ -198,146 +142,100 @@ class User:
             else:
                 decrypted_share_json = self.shared_keys[sender_token].decrypt(enc_share_bytes)
                 decrypted_shares.append(json.loads(decrypted_share_json.decode('utf-8')))
-        
-        logging.info(f"User {self.user_id}: Successfully decrypted all received shares:\n{json.dumps(decrypted_shares, indent=2)}")
         return decrypted_shares
 
-    def submit_summed_shares(self, decrypted_shares):
-        logging.info(f"--- User {self.user_id}: Summing decrypted shares and submitting to server ---")
+    def submit_all_final_data(self, decrypted_shares, mask):
         summed_shares = [0] * VECTOR_SIZE
         for share_vector in decrypted_shares:
             for i in range(VECTOR_SIZE):
                 summed_shares[i] = (summed_shares[i] + share_vector[i]) % self.shamir_handler.PRIME
+        payload_summed = {"token": self.token, "summed_shares": summed_shares}
+        requests.post(f"{SERVER_URL}/submit_summed_shares", json=payload_summed).raise_for_status()
         
-        logging.info(f"User {self.user_id}: Calculated summed shares (b_sum,{self.user_id}): {summed_shares}")
-
-        payload = {"token": self.token, "summed_shares": summed_shares}
-        url = f"{SERVER_URL}/submit_summed_shares"
-        logging.info(f"User {self.user_id}: Making POST request to {url}")
-        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
-
-        response = requests.post(url, json=payload)
-
-        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
-        response.raise_for_status()
-
-        logging.info(f"User {self.user_id}: Submitted summed shares successfully.")
-
-    def submit_masked_weights_and_tag(self, mask):
-        logging.info(f"--- User {self.user_id}: Masking weights and submitting final data ---")
-        weights = [random.uniform(0.0, 1.0) for _ in range(VECTOR_SIZE)]
-        logging.info(f"User {self.user_id}: Generated original weights: {[round(w, 4) for w in weights]}")
-
-        # Encode floats to integers
-        encoded_weights = [int(w * PRECISION_FACTOR) for w in weights]
-        logging.info(f"User {self.user_id}: Encoded weights (multiplied by {PRECISION_FACTOR}): {encoded_weights}")
-        logging.info(f"User {self.user_id}: Using mask from previous step: {mask}")
-        
+        self.original_weights = [random.uniform(0.0, 1.0) for _ in range(VECTOR_SIZE)]
+        encoded_weights = [int(w * PRECISION_FACTOR) for w in self.original_weights]
         masked_weights = [(w + m) for w, m in zip(encoded_weights, mask)]
-        logging.info(f"User {self.user_id}: Calculated masked weights: {masked_weights}")
+        # The user creates the verification tag using the public vector 'a'
+        # Corrected formula: (a * w) + m
+        verification_tag = [(a * w + m) for a, w, m in zip(PUBLIC_VECTOR_A, encoded_weights, mask)]
+        payload_data = {"token": self.token, "masked_weights": masked_weights, "verification_tags": verification_tag}
+        requests.post(f"{SERVER_URL}/submit_data", json=payload_data).raise_for_status()
 
-        # This is a simplified verification tag for demonstration
-        verification_tag = [(w * 2 + m) for w, m in zip(encoded_weights, mask)]
-        logging.info(f"User {self.user_id}: Calculated verification tags: {verification_tag}")
-        
-        payload = {
-            "token": self.token,
-            "masked_weights": masked_weights,
-            "verification_tags": verification_tag
-        }
-        url = f"{SERVER_URL}/submit_data"
-        logging.info(f"User {self.user_id}: Making POST request to {url}")
-        logging.info(f"User {self.user_id}: REQUEST PAYLOAD:\n{json.dumps(payload, indent=2)}")
-        
-        response = requests.post(url, json=payload)
-        
-        logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
-        response.raise_for_status()
-        
-        logging.info(f"User {self.user_id}: Submitted final data successfully.")
-
-    def submit_all_final_data(self, decrypted_shares, mask):
-        """Combines the submission of summed shares and the final masked data."""
-        self.submit_summed_shares(decrypted_shares)
-        self.submit_masked_weights_and_tag(mask)
-
-    def fetch_global_model(self):
-        logging.info(f"--- User {self.user_id}: Fetching global model ---")
+    def fetch_and_verify_global_model(self):
+        logging.info(f"--- User {self.user_id}: Fetching and verifying global model ---")
         
         url = f"{SERVER_URL}/get_global_model"
         logging.info(f"User {self.user_id}: Making GET request to {url}")
-
+        
         response = requests.get(url)
-
+        
         logging.info(f"User {self.user_id}: RESPONSE | Status: {response.status_code} | Body:\n{response.text}")
         response.raise_for_status()
-
-        response_data = response.json()
-        global_model_encoded = response_data['global_model_weights']
         
-        if not global_model_encoded:
-            logging.warning(f"User {self.user_id}: Global model is empty, something went wrong on the server.")
+        response_data = response.json()
+
+        global_model_encoded = response_data.get('global_model_weights', [])
+        aggregated_tag_encoded = response_data.get('aggrigated_tag', [])
+
+        if not global_model_encoded or not aggregated_tag_encoded:
+            logging.warning(f"User {self.user_id}: Global model or tag was empty.")
             return
 
-        # Decode integers back to floats
+        # Decode both the model and the tag back to floats
         global_model_decoded = [w / PRECISION_FACTOR for w in global_model_encoded]
+        aggregated_tag_decoded = [t / PRECISION_FACTOR for t in aggregated_tag_encoded]
         
-        logging.info(f"User {self.user_id}: Final decoded global model: {[round(w, 2) for w in global_model_decoded]}")
+        logging.info(f"User {self.user_id}: Decoded Global Model: {[round(w, 4) for w in global_model_decoded]}")
+        logging.info(f"User {self.user_id}: Decoded Aggregated Tag from Server: {[round(t, 4) for t in aggregated_tag_decoded]}")
+
+        # --- PERFORM VERIFICATION ---
+        # Locally compute what the tag SHOULD be, based on the received global model
+        expected_tag = [a * w for a, w in zip(PUBLIC_VECTOR_A, global_model_decoded)]
+        logging.info(f"User {self.user_id}: Locally Calculated Expected Tag: {[round(t, 4) for t in expected_tag]}")
+
+        # Compare the server's tag with the locally computed one (using a tolerance for float math)
+        if np.allclose(aggregated_tag_decoded, expected_tag, atol=1e-5):
+            logging.info("✅ VERIFICATION SUCCESSFUL: The server's aggregation is correct.")
+        else:
+            logging.error("❌ VERIFICATION FAILED: The server's aggregation is incorrect or was tampered with.")
+
+def perform_action_with_retry(action_function, action_name):
+    """Handles 'Wrong Window' errors by waiting and retrying automatically."""
+    logging.info(f"Attempting to perform: {action_name}")
+    while True:
+        try:
+            result = action_function()
+            logging.info(f"Successfully completed: {action_name}")
+            return result
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 400 and ('Wrong' in e.response.text or 'not open' in e.response.text):
+                logging.warning(f"Server not in correct window for '{action_name}'. Waiting 10 seconds to retry...")
+                time.sleep(10)
+            else:
+                logging.error(f"An unexpected HTTP error occurred for {action_name}: {e.response.text}")
+                raise
+        except requests.exceptions.RequestException as e:
+            logging.error(f"A network error occurred for {action_name}: {e}")
+            raise
 
 def main():
-    """Orchestrates the entire simulation for all users, phase by phase."""
-    
-    # --- Set up logging to file and console ---
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler("simulation.log", mode='w'), # Overwrite log file each run
-            logging.StreamHandler()
-        ]
-    )
-
-    users = [User(user_id=i+1) for i in range(NUM_USERS)]
-    
-    # --- PHASE 1: REGISTRATION ---
-    input("Press Enter to start PHASE 1: REGISTRATION...")
-    logging.info("\n\n=============== PHASE 1: REGISTRATION ===============\n")
-    for user in users:
-        user.register()
-    
-    # --- PHASE 2: KEY EXCHANGE ---
-    input("\nPress Enter to start PHASE 2: KEY EXCHANGE...")
-    logging.info("\n\n=============== PHASE 2: KEY EXCHANGE ===============\n")
-    for user in users:
-        user.fetch_and_establish_keys()
-        
-    # --- PHASE 3: SUBMIT MASK SHARES ---
-    input("\nPress Enter to start PHASE 3: SUBMIT MASK SHARES...")
-    logging.info("\n\n=============== PHASE 3: SUBMIT MASK SHARES ===============\n")
-    user_masks = {} # Store the original masks to use them later
-    for user in users:
-        mask = user.submit_mask_shares()
-        user_masks[user.token] = mask
-        
-    # --- PHASE 4: RECEIVE MASK SHARES ---
-    input("\nPress Enter to start PHASE 4: RECEIVE MASK SHARES...")
-    logging.info("\n\n=============== PHASE 4: RECEIVE MASK SHARES ===============\n")
-    user_decrypted_shares = {}
-    for user in users:
-        decrypted_shares = user.receive_and_decrypt_shares()
-        user_decrypted_shares[user.token] = decrypted_shares
-
-    # --- PHASE 5: SUBMIT ALL DATA (SUMMED SHARES, MASKED WEIGHTS, TAGS) ---
-    input("\nPress Enter to start PHASE 5: SUBMIT ALL DATA...")
-    logging.info("\n\n=============== PHASE 5: SUBMIT ALL DATA ===============\n")
-    for user in users:
-        user.submit_all_final_data(user_decrypted_shares[user.token], user_masks[user.token])
-
-    # --- PHASE 6: FETCH GLOBAL MODEL ---
-    input("\nPress Enter to start PHASE 6: FETCH GLOBAL MODEL...")
-    logging.info("\n\n=============== PHASE 6: FETCH GLOBAL MODEL ===============\n")
-    for user in users:
-        user.fetch_global_model()
+    """Orchestrates the simulation for a single autonomous user."""
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    user = User(user_id=random.randint(100, 999))
+    while True:
+        logging.info("\n\n=============== STARTING NEW ROUND PARTICIPATION ===============")
+        try:
+            perform_action_with_retry(user.register, "Registration")
+            perform_action_with_retry(user.fetch_and_establish_keys, "Key Exchange")
+            mask = perform_action_with_retry(user.submit_mask_shares, "Submit Mask Shares")
+            decrypted_shares = perform_action_with_retry(user.receive_and_decrypt_shares, "Receive Mask Shares")
+            perform_action_with_retry(lambda: user.submit_all_final_data(decrypted_shares, mask), "Submit All Final Data")
+            perform_action_with_retry(user.fetch_and_verify_global_model, "Fetch and Verify Global Model")
+            logging.info("=============== ROUND COMPLETE, WAITING FOR NEXT ===============")
+            time.sleep(30)
+        except Exception as e:
+            logging.error(f"A critical error occurred: {e}. Restarting after 30 seconds.")
+            time.sleep(30)
 
 if __name__ == "__main__":
     main()

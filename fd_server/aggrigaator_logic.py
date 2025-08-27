@@ -18,6 +18,7 @@ class Agrigator:
         self.verification_tags = []
         self.summed_shares = [] # To store b_sum,i from each user
         self.global_model = [] # To store the final result
+        self.aggrigated_tag = []
 
         # 2. INITIALIZE THE LOCK
         # This creates a lock specific to this instance of the Agrigator.
@@ -84,7 +85,7 @@ class Agrigator:
 
             global_values.window = 0
             print("window 0 starts to let the model calculate")
-            self.compute_and_average_weights()
+            self.compute_aggregation_results()
             print("window 6 starts get your weights back")
             global_values.window =  6
             print(self.get_global_model())
@@ -216,47 +217,88 @@ class Agrigator:
     #         self.global_model = []
 
 
-    def compute_and_average_weights(self):
+    # def compute_and_average_weights(self):
+    #     """
+    #     Performs final aggregation with robust error handling.
+    #     It sums the masked weights, reconstructs the summed mask, unmasks the weights,
+    #     and averages the result.
+    #     """
+    #     try:
+    #         # --- 1. Pre-computation Checks (Guard Clauses) ---
+    #         num_users = len(self.users)
+    #         if num_users == 0:
+    #             self.global_model = []
+    #             return
+
+    #         if not self.masked_weights or not self.summed_shares:
+    #             self.global_model = []
+    #             return
+
+    #         # --- 2. Reconstruct the Sum of All Masks ---
+    #         summed_shares_tuples = [(i, share) for i, share in enumerate(self.summed_shares, 1)]
+    #         reconstructed_summed_mask = shamir_handler.reconstruct_secret(summed_shares_tuples)
+
+    #         # --- 3. Sum the Masked Weights Column-wise ---
+    #         summed_masked_weights_1d = [sum(column) for column in zip(*self.masked_weights)]
+
+    #         # --- 4. Unmask and Average the Weights ---
+    #         # Ensure the global model is empty before populating
+    #         self.global_model = []
+            
+    #         # Use a list comprehension for a clean implementation
+    #         unmasked_weights = [
+    #             i - j for i, j in zip(summed_masked_weights_1d, reconstructed_summed_mask)
+    #         ]
+
+    #         # Average the result by dividing by the number of users
+    #         self.global_model = [weight / num_users for weight in unmasked_weights]
+
+    #     except Exception as e:
+    #         # --- 5. Catch-All Error Handling ---
+    #         # In a real application, you might log the error 'e' here
+    #         # Reset the global model to ensure a clean state
+    #         self.global_model = []
+
+    def compute_aggregation_results(self):
         """
-        Performs final aggregation with robust error handling.
-        It sums the masked weights, reconstructs the summed mask, unmasks the weights,
-        and averages the result.
+        Performs the final aggregation for both weights and verification tags.
+        This function is the replacement for compute_and_average_weights.
         """
         try:
-            # --- 1. Pre-computation Checks (Guard Clauses) ---
+            # --- 1. Pre-computation Checks ---
             num_users = len(self.users)
             if num_users == 0:
                 self.global_model = []
-                return
-
-            if not self.masked_weights or not self.summed_shares:
-                self.global_model = []
+                self.aggregated_tag = []
                 return
 
             # --- 2. Reconstruct the Sum of All Masks ---
+            # This is the same for both weights and tags
             summed_shares_tuples = [(i, share) for i, share in enumerate(self.summed_shares, 1)]
             reconstructed_summed_mask = shamir_handler.reconstruct_secret(summed_shares_tuples)
 
-            # --- 3. Sum the Masked Weights Column-wise ---
-            summed_masked_weights_1d = [sum(column) for column in zip(*self.masked_weights)]
-
-            # --- 4. Unmask and Average the Weights ---
-            # Ensure the global model is empty before populating
-            self.global_model = []
-            
-            # Use a list comprehension for a clean implementation
+            # --- 3. Process Masked Weights ---
+            summed_masked_weights = [sum(column) for column in zip(*self.masked_weights)]
             unmasked_weights = [
-                i - j for i, j in zip(summed_masked_weights_1d, reconstructed_summed_mask)
+                i - j for i, j in zip(summed_masked_weights, reconstructed_summed_mask)
             ]
-
-            # Average the result by dividing by the number of users
             self.global_model = [weight / num_users for weight in unmasked_weights]
+
+            # --- 4. Process Verification Tags (Parallel Logic) ---
+            summed_verification_tags = [sum(column) for column in zip(*self.verification_tags)]
+            unmasked_tags = [
+                i - j for i, j in zip(summed_verification_tags, reconstructed_summed_mask)
+            ]
+            # The aggregated tag is also an average
+            self.aggregated_tag = [tag / num_users for tag in unmasked_tags]
+            
+            print("Successfully computed global model and aggregated tag.")
 
         except Exception as e:
             # --- 5. Catch-All Error Handling ---
-            # In a real application, you might log the error 'e' here
-            # Reset the global model to ensure a clean state
+            print(f"An error occurred during final aggregation: {e}")
             self.global_model = []
+            self.aggregated_tag = []
 
 
             
@@ -265,6 +307,9 @@ class Agrigator:
         Returns the computed global model for the current round.
         """
         return self.global_model
+    
+    def get_aggrigated_tag(self):
+        return self.aggregated_tag
 
 
 aggrigatorInstance = Agrigator()
