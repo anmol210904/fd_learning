@@ -14,7 +14,8 @@ def register_user():
     """
     This endpoint handles user registration by accepting a signed Diffie-Hellman public key.
     """
-   
+    if(global_values.window != 1):
+        return jsonify({'error': 'Wrong Window'}), 400
 
     if not request.is_json:
         return jsonify({'error': 'Request must be JSON'}), 400
@@ -79,6 +80,9 @@ def get_users(token):
     The token is expected as an integer in the URL path.
     """
 
+    if(global_values.window != 2):
+        return jsonify({'error': 'Wrong Window'}), 400
+
     
     try:
         if not isinstance(token, int):
@@ -120,6 +124,9 @@ def submit_shamir_shares():
     The user must provide their session token for authentication.
     """
     # --- 1. Validate the incoming request ---
+    if(global_values.window != 3):
+        return jsonify({'error': 'Wrong Window'}), 400
+
     try:
         data = request.get_json()
         if not data:
@@ -166,6 +173,9 @@ def get_shamir_shares():
     This endpoint retrieves all the Shamir's shares for a specific user.
     The user identifies themselves using their session token.
     """
+    if(global_values.window != 4):
+        return jsonify({'error': 'Wrong Window'}), 400
+
     # --- 1. Validate the incoming request ---
     try:
         data = request.get_json()
@@ -206,6 +216,9 @@ def submit_data():
     """
     Receives a user's masked weights and verification tag for a round.
     """
+    if(global_values.window != 5):
+        return jsonify({'error': 'Wrong Window'}), 400
+
     try:
         # --- 1. Get and Validate Data ---
         data = request.get_json()
@@ -256,6 +269,9 @@ def submit_summed_shares():
     """
     Receives a user's summed shares vector (b_sum,i) for a round.
     """
+    if(global_values.window != 5):
+        return jsonify({'error': 'Wrong Window'}), 400
+
     try:
         # --- 1. Get and Validate Data ---
         data = request.get_json()
@@ -298,6 +314,10 @@ def get_global_model():
     Allows a user to retrieve the final global model for the current round.
     This uses a long-polling approach: it will wait until the model is ready.
     """
+
+    if(global_values.window != 6):
+        return jsonify({'error': 'Wrong Window'}), 400
+
     try:
         # In a real system, you might add a timeout to this loop.
         # For now, it will wait until the aggregator's main loop computes the model.

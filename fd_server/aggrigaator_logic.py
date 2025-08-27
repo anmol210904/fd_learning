@@ -5,6 +5,7 @@ import time
 import random
 from classes import UserPKs
 from shamirClass import shamir_handler
+import threading
 
 
 
@@ -17,6 +18,10 @@ class Agrigator:
         self.verification_tags = []
         self.summed_shares = [] # To store b_sum,i from each user
         self.global_model = [] # To store the final result
+
+        # 2. INITIALIZE THE LOCK
+        # This creates a lock specific to this instance of the Agrigator.
+        self._lock = threading.Lock()
 
 
     def mainfunction(self):
@@ -34,7 +39,7 @@ class Agrigator:
             #lets start with the registration round
             global_values.window = 1
             print("Window 1 started")
-            time.sleep(10)
+            time.sleep(30)
 
 
             #not lets make the window 1 end
@@ -51,43 +56,60 @@ class Agrigator:
 
             #lets start window2
             print("Window 2 started")
-            time.sleep(10)
+            global_values.window =  2
+            time.sleep(30)
 
 
             #lets start window 3
             #submittion of shmir shares starts
             print("Lets start window 3")
-            time.sleep(10)
+            global_values.window =  3
+            time.sleep(30)
 
             #lets starts window 4
             #fetching of shamir shares start
             print("weindow = 4")
-            time.sleep(10)
-
+            global_values.window =  4
+            time.sleep(30)
 
 
 
             # lets start window 5
             #submittion of masked model and tags start
+            global_values.window =  5
             print("window = 5")
-            time.sleep(10)
+            time.sleep(30)
 
 
 
-
+            global_values.window = 0
             print("window 0 starts to let the model calculate")
             self.compute_and_average_weights()
             print("window 6 starts get your weights back")
+            global_values.window =  6
             print(self.get_global_model())
            
 
-            time.sleep(300)
+            input("Should we start the next round?")
+
+            
 
 
     # ... (Your existing functions: registerUser, getUsersPk, etc.) ...
     def registerUser(self, PK, SignedPK, DSAPK):
-        self.users.append(UserPKs(PK,SignedPK,DSAPK))
-        return str(len(self.users))
+        """
+        Safely registers a user and returns a unique token (their position).
+        This method is now thread-safe.
+        """
+        # 3. ACQUIRE THE LOCK BEFORE THE CRITICAL SECTION
+        with self._lock:
+            # --- Critical Section Start ---
+            # Only one thread can execute this code at a time.
+            self.users.append(UserPKs(PK, SignedPK, DSAPK))
+            token = len(self.users)
+            # --- Critical Section End ---
+            
+        return str(token)
 
     def getUsersPk(self):
         return self.users
