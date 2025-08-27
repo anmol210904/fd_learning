@@ -33,7 +33,7 @@ class Agrigator:
             #LETS START WITH WINDOW 0 SO THAT BLA BLA 
             #window 0 is absence of all windows 
             global_values.window = 0
-            time.sleep(10)
+            time.sleep(30)
 
 
             #lets start with the registration round
