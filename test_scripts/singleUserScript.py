@@ -4,6 +4,7 @@ import random
 import base64
 import time
 import logging
+import os
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
@@ -54,7 +55,8 @@ class AESCipher:
     def __init__(self, key):
         self.key = key
     def encrypt(self, plaintext_bytes):
-        nonce = random.getrandbits(96).to_bytes(12, 'big')
+        # FIX: Generate a cryptographically secure 12-byte nonce directly.
+        nonce = os.urandom(12)
         aead = AESGCM(self.key)
         ciphertext = aead.encrypt(nonce, plaintext_bytes, None)
         return nonce + ciphertext
@@ -209,7 +211,7 @@ def perform_action_with_retry(action_function, action_name):
             logging.info(f"Successfully completed: {action_name}")
             return result
         except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 400 and 'Wrong' in e.response.text:
+            if e.response.status_code == 400 and ('Wrong' in e.response.text or 'not open' in e.response.text):
                 logging.warning(f"Server not in correct window for '{action_name}'. Waiting 10 seconds to retry...")
                 time.sleep(10)
             else:
