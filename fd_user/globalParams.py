@@ -1,2 +1,3 @@
 class GlobalParams:
     modelPath = ""
+    savePath = ""

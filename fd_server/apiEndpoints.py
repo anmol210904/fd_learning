@@ -316,7 +316,8 @@ def get_global_model():
     """
 
     if(global_values.window != 6):
-        return jsonify({'error': 'Wrong Window'}), 400
+        print("window = ",global_values.window)
+        return jsonify({'error': f'Wrong Window'}), 400
 
     try:
         # In a real system, you might add a timeout to this loop.
@@ -338,6 +339,34 @@ def get_global_model():
         return jsonify({"error": f"An internal server error occurred: {str(e)}"}), 500
     
 
+@app.route('/get_initial_model', methods=['GET'])
+def get_initial_model():
+    """
+    Allows a user to retrieve the final global model for the current round.
+    This uses a long-polling approach: it will wait until the model is ready.
+    """
+
+    if(global_values.window != 0):
+        print("window = ",global_values.window)
+        return jsonify({'error': 'Wrong Window'}), 400
+
+    try:
+        # In a real system, you might add a timeout to this loop.
+        # For now, it will wait until the aggregator's main loop computes the model.
+
+        global_model = aggrigatorInstance.get_global_model()
+
+        
+        
+        return jsonify({
+            "message": "Global model is ready.",
+            "global_model_weights": global_model,
+            "aggrigated_tag":global_model
+        }), 200
+
+    except Exception as e:
+        # General error handler
+        return jsonify({"error": f"An internal server error occurred: {str(e)}"}), 500
 
 
 
