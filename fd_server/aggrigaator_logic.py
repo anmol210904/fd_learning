@@ -132,9 +132,27 @@ class Agrigator:
             self.summed_shares[user_index] = summed_shares
 
     # --- CORRECTED AGGREGATION LOGIC ---
-    def compute_aggregation_results(self):
+    def compute_aggregation_results(self, use_field_average: bool = False):
         """
-        Performs the final aggregation using correct finite field arithmetic.
+        Performs the final aggregation.
+
+        Behavior controlled by `use_field_average`:
+        - If False (default): DO NOT divide — publish the summed values:
+            self.global_model  := sum_of_true_weights (mod PRIME)
+            self.aggregated_tag := sum_of_true_tags (mod PRIME)
+            This is a straightforward, easy-to-inspect output for demos / visualization.
+
+        - If True: perform an average step but *not* via modular inverse.
+            Instead:
+            1) Convert summed integers to signed integers.
+            2) Convert to floats by dividing by PRECISION_FACTOR.
+            3) Compute float average = (sum_floats / active_users).
+            4) Re-encode average floats back to integers (signed -> modular rep).
+            This yields server-side averaged values using ordinary float division,
+            then maps them back into the finite field for downstream verification.
+
+        Note: When using the float-division path you must ensure PRECISION_FACTOR is the same
+        client <-> server and be aware of rounding. This path is mainly for demo/debug.
         """
         try:
             num_users = len(self.users)
@@ -155,40 +173,123 @@ class Agrigator:
                 print(f"Aggregation failed: Only {active_users} user(s) submitted data.")
                 self.global_model, self.aggregated_tag = [], []
                 return
-            
+
             vector_size = len(valid_masked_weights[0])
             prime = shamir_handler.PRIME
 
             # --- 1. Reconstruct the Sum of All Masks ---
+            # valid_summed_shares is a list of per-user summed-share vectors
+            # Build tuples (id, share_vector) for reconstruct
             summed_shares_tuples = [(i + 1, share) for i, share in enumerate(valid_summed_shares)]
             reconstructed_summed_mask = shamir_handler.reconstruct_secret(summed_shares_tuples)
 
-            # --- 2. Process Masked Weights ---
+            # --- 2. Sum Masked Weights (mod prime) ---
             sum_of_masked_weights = [0] * vector_size
             for user_weights in valid_masked_weights:
                 for i in range(vector_size):
-                    sum_of_masked_weights[i] = (sum_of_masked_weights[i] + user_weights[i]) % prime
-            
-            sum_of_true_weights = [(sum_of_masked_weights[i] - reconstructed_summed_mask[i] + prime) % prime for i in range(vector_size)]
-            
-            # Use modular inverse for division
-            mod_inverse_n = shamir_handler._mod_inverse(active_users)
-            self.global_model = [(val * mod_inverse_n) % prime for val in sum_of_true_weights]
+                    sum_of_masked_weights[i] = (sum_of_masked_weights[i] + int(user_weights[i])) % prime
 
-            # --- 3. Process Verification Tags (Parallel Logic) ---
+            # Remove summed mask to get sum of true encoded weights (mod prime)
+            sum_of_true_weights = [
+                (sum_of_masked_weights[i] - reconstructed_summed_mask[i] + prime) % prime
+                for i in range(vector_size)
+            ]
+
+            # --- 3. Sum verification tags (mod prime) and remove mask contribution ---
             sum_of_verification_tags = [0] * vector_size
             for user_tags in valid_tags:
                 for i in range(vector_size):
-                    sum_of_verification_tags[i] = (sum_of_verification_tags[i] + user_tags[i]) % prime
+                    sum_of_verification_tags[i] = (sum_of_verification_tags[i] + int(user_tags[i])) % prime
 
-            sum_of_true_tags = [(sum_of_verification_tags[i] - reconstructed_summed_mask[i] + prime) % prime for i in range(vector_size)]
-            self.aggregated_tag = [(val * mod_inverse_n) % prime for val in sum_of_true_tags]
+            sum_of_true_tags = [
+                (sum_of_verification_tags[i] - reconstructed_summed_mask[i] + prime) % prime
+                for i in range(vector_size)
+            ]
 
-            print("Successfully computed global model and aggregated tag.")
+            # Store sums for inspection / client use
+            # Default behaviour: publish sums (no division)
+            if not use_field_average:
+                # Publish summed values (mod prime). Clients must divide by active_users themselves
+                # if they want an average in float-space.
+                self.global_model = [val % prime for val in sum_of_true_weights]
+                self.aggregated_tag = [val % prime for val in sum_of_true_tags]
+
+                # Save active_users so get_global_model can optionally return it
+                self._last_active_users = active_users
+
+                print("Successfully computed summed global model and aggregated tag (no division).")
+                return
+
+            # -----------------------
+            # FLOAT-AVERAGE-THEN-REENCODE PATH
+            # -----------------------
+            # This path converts the summed integers -> signed ints -> floats
+            # computes a float average, then re-encodes back into modular integers.
+            # WARNING: this is for demo/debug; it introduces floating rounding.
+            try:
+                # Helper: decode signed integer (centered around prime//2)
+                def _decode_signed_int(x):
+                    half = prime // 2
+                    if x > half:
+                        return x - prime
+                    return x
+
+                # 1) Convert summed true weights to signed integers, then to floats / PRECISION
+                summed_signed_ints = [_decode_signed_int(int(v)) for v in sum_of_true_weights]
+                summed_floats = [s / PRECISION_FACTOR for s in summed_signed_ints]
+
+                # 2) Compute float-average
+                averaged_floats = [s / float(active_users) for s in summed_floats]
+
+                # 3) Re-encode averaged floats to integers: multiply by PRECISION and map to field rep
+                reencoded_avgs = []
+                for f in averaged_floats:
+                    # round to nearest integer to reduce bias
+                    rounded = int(round(f * PRECISION_FACTOR))
+                    # map into field representative (mod prime)
+                    if rounded < 0:
+                        # convert negative to positive representative
+                        rounded_mod = (rounded + prime) % prime
+                    else:
+                        rounded_mod = rounded % prime
+                    reencoded_avgs.append(rounded_mod)
+
+                # 4) Do same process for tags: note tags were sum(a*w + m). We can derive average tag
+                # by decoding sum_of_true_tags similarly:
+                summed_tag_signed = [_decode_signed_int(int(v)) for v in sum_of_true_tags]
+                summed_tag_floats = [s / PRECISION_FACTOR for s in summed_tag_signed]
+                averaged_tag_floats = [s / float(active_users) for s in summed_tag_floats]
+
+                reencoded_tag_avgs = []
+                for f in averaged_tag_floats:
+                    rounded = int(round(f * PRECISION_FACTOR))
+                    if rounded < 0:
+                        rounded_mod = (rounded + prime) % prime
+                    else:
+                        rounded_mod = rounded % prime
+                    reencoded_tag_avgs.append(rounded_mod)
+
+                self.global_model = reencoded_avgs
+                self.aggregated_tag = reencoded_tag_avgs
+                self._last_active_users = active_users
+
+                print("Successfully computed averaged global model (float-average path) and re-encoded tags.")
+                return
+
+            except Exception as e:
+                print(f"Error during float-average re-encoding: {e}")
+                # Fallback: publish summed values if re-encoding fails
+                self.global_model = [val % prime for val in sum_of_true_weights]
+                self.aggregated_tag = [val % prime for val in sum_of_true_tags]
+                self._last_active_users = active_users
+                print("Falling back to summed values (no division).")
+                return
 
         except Exception as e:
             print(f"An error occurred during final aggregation: {e}")
             self.global_model, self.aggregated_tag = [], []
+            return
+
 
     def get_global_model(self):
         return self.global_model

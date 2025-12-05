@@ -1,0 +1,17 @@
+Script started at 2025-10-21 11:25:40
+--- Phase 1: Fetching Pending Assignments ---
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=3&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Successfully fetched 20 assignments.
+
+--- Phase 2: Processing and Approving Each Assignment ---
+
+(1/20) Submitting approval for hemant8502013@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "hemant8502013@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "1KHipcezllLHzV-IJ8Zn3uzNvV0HtIxpi?usp=sharing", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(2/20) Submitting approval for hemant8502013@gmail.com | Task: task4
+  -> Payload: {"status": "approved", "email": "hemant8502013@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d283492d3c7b6b5436", "courseName": "1KHipcezllLHzV-IJ8Zn3uzNvV0HtIxpi?usp=sharing", "taskName": "task4", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.

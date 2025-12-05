@@ -1,0 +1,75 @@
+Script started at 2025-10-21 11:23:15
+--- Phase 1: Fetching Pending Assignments ---
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=2&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Successfully fetched 20 assignments.
+
+--- Phase 2: Processing and Approving Each Assignment ---
+
+(1/20) Submitting approval for hemanttejbhan0958@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "hemanttejbhan0958@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "1kWPGuJHzj9JaC0rd-Kw3T4dQ0-IWNZdr?usp=drive_link", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(2/20) Submitting approval for hemanttejbhan0958@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "hemanttejbhan0958@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "1TP03J-YMpBrKkqID2ESMHZ37kCDHx6cE?usp=drive_link", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(3/20) Submitting approval for mtrv6930@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "mtrv6930@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ETZM6dsAqc1MgdfyBzH0DuUB2KKcSe3hgbqCOvzkNRRXbg?e=ZmO21f", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(4/20) Submitting approval for shyamawm64@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "shyamawm64@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "edit?tab=t.0", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(5/20) Submitting approval for kadampushpendar72@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "kadampushpendar72@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "1q1Gi01c7F8JmkAH8E45UwKsnfiP8fd0X", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(6/20) Submitting approval for rakeshgautamofficial07@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "rakeshgautamofficial07@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "view?usp=sharing", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(7/20) Submitting approval for himangi.bvn@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "himangi.bvn@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "edit?usp=sharing", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(8/20) Submitting approval for superuser.pradeep2023@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "superuser.pradeep2023@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "1TUwIDS4WtcZnIZmqXScT_mOzzi-3jslz?usp=sharing", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(9/20) Submitting approval for harshiluk246@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "harshiluk246@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "edit?usp=sharing", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(10/20) Submitting approval for mangesh.m.phulari@gmail.com | Task: task4
+  -> Payload: {"status": "approved", "email": "mangesh.m.phulari@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d283492d3c7b6b5436", "courseName": "edit?usp=sharing", "taskName": "task4", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(11/20) Submitting approval for sankhyayand001@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "sankhyayand001@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "view?usp=sharing", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(12/20) Submitting approval for maheklalu20@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "maheklalu20@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "edit?tab=t.0", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(13/20) Submitting approval for superuser.pradeep2023@gmail.com | Task: task4
+  -> Payload: {"status": "approved", "email": "superuser.pradeep2023@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d283492d3c7b6b5436", "courseName": "1d7IohE3As3sxg1TsNeZigFTwFj8fK462?usp=sharing", "taskName": "task4", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(14/20) Submitting approval for yalleshraibagi@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "yalleshraibagi@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "view?usp=drive_link", "taskName": "task1", "feedback": "Fine."}

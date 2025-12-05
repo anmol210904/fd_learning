@@ -1,0 +1,25 @@
+Script started at 2025-10-21 11:25:01
+--- Phase 1: Fetching Pending Assignments ---
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=2&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Successfully fetched 20 assignments.
+
+--- Phase 2: Processing and Approving Each Assignment ---
+
+(1/20) Submitting approval for kadampushpendar72@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "kadampushpendar72@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "1q1Gi01c7F8JmkAH8E45UwKsnfiP8fd0X", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(2/20) Submitting approval for rakeshgautamofficial07@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "rakeshgautamofficial07@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "view?usp=sharing", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(3/20) Submitting approval for himangi.bvn@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "himangi.bvn@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "edit?usp=sharing", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(4/20) Submitting approval for a.roy@roytech.in | Task: task1
+  -> Payload: {"status": "approved", "email": "a.roy@roytech.in", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "12M_964U1C9_HbrGSpKKWZbgGuxUUAq-Y?usp=drive_link", "taskName": "task1", "feedback": "Fine."}

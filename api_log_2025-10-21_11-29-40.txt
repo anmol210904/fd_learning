@@ -1,0 +1,483 @@
+Script started at 2025-10-21 11:29:40
+--- Phase 1: Fetching All Pending Assignments from Pages 1 to 5 ---
+
+Fetching assignments from page 1...
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=1&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Found 20 assignments on page 1.
+
+Fetching assignments from page 2...
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=2&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Found 20 assignments on page 2.
+
+Fetching assignments from page 3...
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=3&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Found 20 assignments on page 3.
+
+Fetching assignments from page 4...
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=4&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Found 20 assignments on page 4.
+
+Fetching assignments from page 5...
+Requesting URL: https://api.upskillmafia.com/lms/assignment/mentor/fetch-tasks?courseId=680c86ea364f718dc17b69b1&page=5&pageSize=20&status=pending&sortBy=submittedOn&sortOrder=latest
+Fetch Status Code: 200
+Found 10 assignments on page 5.
+
+--- Fetch Complete: Collected a total of 90 assignments. ---
+
+--- Phase 2: Processing and Approving Each Assignment ---
+
+(1/90) Submitting approval for saikatpramanik2005@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "saikatpramanik2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(2/90) Submitting approval for saikatpramanik2005@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "saikatpramanik2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already rejected"}
+
+(3/90) Submitting approval for saikatpramanik2005@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "saikatpramanik2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already rejected"}
+
+(4/90) Submitting approval for saikatpramanik2005@gmail.com | Task: task4
+  -> Payload: {"status": "approved", "email": "saikatpramanik2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d283492d3c7b6b5436", "courseName": "ethicalhacking", "taskName": "task4", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already rejected"}
+
+(5/90) Submitting approval for saikatpramanik2005@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "saikatpramanik2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already rejected"}
+
+(6/90) Submitting approval for saikatpramanik2005@gmail.com | Task: task6
+  -> Payload: {"status": "approved", "email": "saikatpramanik2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d483492d3c7b6b543a", "courseName": "ethicalhacking", "taskName": "task6", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already rejected"}
+
+(7/90) Submitting approval for saikatpramanik2005@gmail.com | Task: task7
+  -> Payload: {"status": "approved", "email": "saikatpramanik2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d583492d3c7b6b543c", "courseName": "ethicalhacking", "taskName": "task7", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already rejected"}
+
+(8/90) Submitting approval for mayanksehgal2006@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "mayanksehgal2006@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(9/90) Submitting approval for shubham800612@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "shubham800612@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(10/90) Submitting approval for yashchopra8121008@gmail.com | Task: task7
+  -> Payload: {"status": "approved", "email": "yashchopra8121008@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d583492d3c7b6b543c", "courseName": "ethicalhacking", "taskName": "task7", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(11/90) Submitting approval for yashchopra8121008@gmail.com | Task: task7
+  -> Payload: {"status": "approved", "email": "yashchopra8121008@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d583492d3c7b6b543c", "courseName": "ethicalhacking", "taskName": "task7", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(12/90) Submitting approval for yashchopra8121008@gmail.com | Task: task7
+  -> Payload: {"status": "approved", "email": "yashchopra8121008@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d583492d3c7b6b543c", "courseName": "ethicalhacking", "taskName": "task7", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(13/90) Submitting approval for yashchopra8121008@gmail.com | Task: task7
+  -> Payload: {"status": "approved", "email": "yashchopra8121008@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d583492d3c7b6b543c", "courseName": "ethicalhacking", "taskName": "task7", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(14/90) Submitting approval for kadampushpendar72@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "kadampushpendar72@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(15/90) Submitting approval for rakeshgautamofficial07@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "rakeshgautamofficial07@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(16/90) Submitting approval for himangi.bvn@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "himangi.bvn@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(17/90) Submitting approval for a.roy@roytech.in | Task: task1
+  -> Payload: {"status": "approved", "email": "a.roy@roytech.in", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(18/90) Submitting approval for agsneharwal@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "agsneharwal@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(19/90) Submitting approval for raja_dhy_2010@yahoo.in | Task: task1
+  -> Payload: {"status": "approved", "email": "raja_dhy_2010@yahoo.in", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(20/90) Submitting approval for sonukumar50677@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "sonukumar50677@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(21/90) Submitting approval for sonukumar50677@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "sonukumar50677@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(22/90) Submitting approval for rs7587031@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "rs7587031@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(23/90) Submitting approval for aryanbokolia34@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "aryanbokolia34@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(24/90) Submitting approval for lakshaysaxena1997@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "lakshaysaxena1997@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(25/90) Submitting approval for pavandongare3153@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "pavandongare3153@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(26/90) Submitting approval for narulaarjun732@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "narulaarjun732@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(27/90) Submitting approval for sharvan.kumar237197@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "sharvan.kumar237197@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(28/90) Submitting approval for priyanshshigawan@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "priyanshshigawan@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(29/90) Submitting approval for kamleshbiswas629@gmail.com | Task: task4
+  -> Payload: {"status": "approved", "email": "kamleshbiswas629@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d283492d3c7b6b5436", "courseName": "ethicalhacking", "taskName": "task4", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(30/90) Submitting approval for lvscoder13@gmail.com | Task: task7
+  -> Payload: {"status": "approved", "email": "lvscoder13@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d583492d3c7b6b543c", "courseName": "ethicalhacking", "taskName": "task7", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(31/90) Submitting approval for lvscoder13@gmail.com | Task: task6
+  -> Payload: {"status": "approved", "email": "lvscoder13@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d483492d3c7b6b543a", "courseName": "ethicalhacking", "taskName": "task6", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(32/90) Submitting approval for raj22ped@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "raj22ped@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(33/90) Submitting approval for shashankvenkatesh270@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "shashankvenkatesh270@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(34/90) Submitting approval for himangi.bvn@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "himangi.bvn@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(35/90) Submitting approval for jytnb912@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "jytnb912@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(36/90) Submitting approval for hetp4846@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "hetp4846@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(37/90) Submitting approval for ashsih1651ss@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "ashsih1651ss@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(38/90) Submitting approval for jytnb912@gmail.com | Task: task4
+  -> Payload: {"status": "approved", "email": "jytnb912@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d283492d3c7b6b5436", "courseName": "ethicalhacking", "taskName": "task4", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(39/90) Submitting approval for shivam101981@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "shivam101981@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(40/90) Submitting approval for surajsomuse2007041@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "surajsomuse2007041@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(41/90) Submitting approval for mangesh.m.phulari@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "mangesh.m.phulari@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(42/90) Submitting approval for kypstudy@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "kypstudy@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(43/90) Submitting approval for mgtech6243@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "mgtech6243@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(44/90) Submitting approval for daksh050806@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "daksh050806@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(45/90) Submitting approval for thor55555rangnarok@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "thor55555rangnarok@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(46/90) Submitting approval for kumar2003yash@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "kumar2003yash@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(47/90) Submitting approval for amitmallik6421@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "amitmallik6421@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(48/90) Submitting approval for zeeshan.1989@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "zeeshan.1989@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(49/90) Submitting approval for kumavatk77@gmail.com | Task: task7
+  -> Payload: {"status": "approved", "email": "kumavatk77@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d583492d3c7b6b543c", "courseName": "ethicalhacking", "taskName": "task7", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(50/90) Submitting approval for superuser.pradeep2023@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "superuser.pradeep2023@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(51/90) Submitting approval for superuser.pradeep2023@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "superuser.pradeep2023@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(52/90) Submitting approval for creatorai345@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "creatorai345@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(53/90) Submitting approval for annadapr.nayak@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "annadapr.nayak@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(54/90) Submitting approval for luazaijtnib@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "luazaijtnib@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(55/90) Submitting approval for sanjeevkumar7764932586@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "sanjeevkumar7764932586@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(56/90) Submitting approval for ishusharma8120962@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "ishusharma8120962@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(57/90) Submitting approval for luazaijtnib@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "luazaijtnib@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(58/90) Submitting approval for shashi.shashi.iyer@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "shashi.shashi.iyer@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(59/90) Submitting approval for mohdbilalrazi@amityonline.com | Task: task1
+  -> Payload: {"status": "approved", "email": "mohdbilalrazi@amityonline.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(60/90) Submitting approval for mantospubggaming@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "mantospubggaming@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(61/90) Submitting approval for akshanshmanu2007@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "akshanshmanu2007@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(62/90) Submitting approval for suraj.kumar6446@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "suraj.kumar6446@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(63/90) Submitting approval for kp982888@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "kp982888@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 404
+  -> FAILED: Server responded with: {"success":false,"message":"Task not found"}
+
+(64/90) Submitting approval for kunaljangid107@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "kunaljangid107@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(65/90) Submitting approval for kunaljangid107@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "kunaljangid107@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(66/90) Submitting approval for yourdragon2003@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "yourdragon2003@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(67/90) Submitting approval for prayansaraswat@gmail.com | Task: task4
+  -> Payload: {"status": "approved", "email": "prayansaraswat@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d283492d3c7b6b5436", "courseName": "ethicalhacking", "taskName": "task4", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(68/90) Submitting approval for donravi895@gmail.com | Task: task6
+  -> Payload: {"status": "approved", "email": "donravi895@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d483492d3c7b6b543a", "courseName": "ethicalhacking", "taskName": "task6", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(69/90) Submitting approval for ilearn568@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "ilearn568@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(70/90) Submitting approval for dograakhil2022@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "dograakhil2022@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(71/90) Submitting approval for sourabpatelpatel@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "sourabpatelpatel@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 200
+  -> SUCCESS: Assignment approved.
+
+(72/90) Submitting approval for prathmeshsanas@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "prathmeshsanas@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(73/90) Submitting approval for iganshumanig@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "iganshumanig@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already rejected"}
+
+(74/90) Submitting approval for sougatasahoo341@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "sougatasahoo341@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(75/90) Submitting approval for bkkushal2005@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "bkkushal2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(76/90) Submitting approval for bkkushal2005@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "bkkushal2005@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(77/90) Submitting approval for charu.in.13@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "charu.in.13@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(78/90) Submitting approval for charu.in.13@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "charu.in.13@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(79/90) Submitting approval for charu.in.13@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "charu.in.13@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(80/90) Submitting approval for arjunjain8887@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "arjunjain8887@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(81/90) Submitting approval for yuvraj280605@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "yuvraj280605@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(82/90) Submitting approval for yuvraj280605@gmail.com | Task: task2
+  -> Payload: {"status": "approved", "email": "yuvraj280605@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d083492d3c7b6b5432", "courseName": "ethicalhacking", "taskName": "task2", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(83/90) Submitting approval for aryanmali440@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "aryanmali440@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(84/90) Submitting approval for aryanmali440@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "aryanmali440@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(85/90) Submitting approval for aryanmali440@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "aryanmali440@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(86/90) Submitting approval for aryanmali440@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "aryanmali440@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(87/90) Submitting approval for aryanmali440@gmail.com | Task: task5
+  -> Payload: {"status": "approved", "email": "aryanmali440@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d383492d3c7b6b5438", "courseName": "ethicalhacking", "taskName": "task5", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+(88/90) Submitting approval for bhaveshagrawal633@gmail.com | Task: task1
+  -> Payload: {"status": "approved", "email": "bhaveshagrawal633@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224cf83492d3c7b6b5430", "courseName": "ethicalhacking", "taskName": "task1", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+[WARNING] Skipping assignment due to missing data: {'_id': '67fcb25cf0674e2e44a9f192', 'email': 'test@gmail.com', 'courseId': '680c86ea364f718dc17b69b1', 'task': {'taskName': '680c86ea364f718dc17b69cc', 'taskLink': 'www.google.com', 'status': 'submitted', 'submittedOn': '2025-04-26T21:06:50.893Z', 'feedback': '', 'mentor': '', '_id': '680d4aea1bcec617d0267a09'}}
+
+(90/90) Submitting approval for himanshukaushik1611@gmail.com | Task: task3
+  -> Payload: {"status": "approved", "email": "himanshukaushik1611@gmail.com", "mentorEmail": "", "courseId": "680c86ea364f718dc17b69b1", "assignmentId": "68f224d183492d3c7b6b5434", "courseName": "ethicalhacking", "taskName": "task3", "feedback": "Fine."}
+  -> Feedback API Response Status: 400
+  -> FAILED: Server responded with: {"success":false,"message":"Task already approved"}
+
+--- Summary ---
+Total assignments processed: 90
+Successfully approved: 46
+
+Script finished. All logs are saved to: api_log_2025-10-21_11-29-40.txt
